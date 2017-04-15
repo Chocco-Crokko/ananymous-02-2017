@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar ./target/Ananymous-1.0-SNAPSHOT.jar
+web: java -jar ./target/Ananymous-1.0-SNAPSHOT.jar

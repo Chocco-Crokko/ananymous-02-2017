@@ -41,7 +41,7 @@ public class AccountService{
         return user != null && doCheckPassword(user, password);
     }
 
-    public Long signup(@NotNull UserRequest user) {
+    public @Nullable Long signup(@NotNull UserRequest user) {
         final String encodedPassword = encoder.encode(user.getPassword());
         return db.add(user.getLogin(), user.getEmail(), encodedPassword);
     }
@@ -77,6 +77,10 @@ public class AccountService{
     private List<FullUserResponse> convertUser(List<User> users) {
         return users.stream().map(user -> new FullUserResponse(user.getId(), user.getLogin(), user.getEmail()))
                 .collect(Collectors.toList());
+    }
+
+    public void clear() {
+        db.clear();
     }
 
 

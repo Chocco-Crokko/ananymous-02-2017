@@ -4,7 +4,6 @@ import application.models.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,5 +53,10 @@ public class UserDAOFakeImpl implements UserDAO {
     @Override
     public @NotNull List<User> getUsers() {
         return db.values().stream().collect(Collectors.toList());
+    }
+
+    @Override
+    public void clear() {
+
     }
 }

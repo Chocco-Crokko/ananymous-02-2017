@@ -15,4 +15,4 @@ deploy:
     branch: develop
   skip_cleanup: true
 install:
-  - mvn clean install
+  - mvn test -B

@@ -1,9 +1,11 @@
 package application.controllers;
 
+import application.models.User;
 import application.services.AccountService;
 import application.utils.Validator;
 import application.utils.requests.UserRequest;
 import application.utils.requests.UsernameRequest;
+import application.utils.responses.FullUserResponse;
 import application.utils.responses.IdResponse;
 import application.utils.responses.MessageResponse;
 import org.springframework.http.HttpStatus;
@@ -23,7 +25,6 @@ public class SessionController extends BaseController {
         super(accountService);
     }
 
-
     @PostMapping(path = "/signup", consumes = "application/json", produces = "application/json")
     public ResponseEntity signup(@RequestBody UserRequest body, HttpSession httpSession)
     {
@@ -35,15 +36,14 @@ public class SessionController extends BaseController {
         } else if (httpSession.getAttribute(USER_ID) != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new MessageResponse("User logged in this session"));
-        } else if (accountService.isUniqueLogin(body.getLogin())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(body.getLogin() + "already exist");
-        } else if (accountService.isUniqueEmail(body.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(body.getEmail() + "already exist");
         }
 
         final Long id = accountService.signup(body);
+        if (id == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MessageResponse(String.format("User %s already exist", body.getLogin())));
+        }
+
         httpSession.setAttribute(USER_ID, id);
         return ResponseEntity.ok(new IdResponse(id));
     }
@@ -64,12 +64,12 @@ public class SessionController extends BaseController {
         final String username = body.getUsername();
         final Long id = accountService.getUserID(username);
 
-        if (id == null || !accountService.isUserExists(id)) {
+        if (id == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse(String.format("username: %s, user not found", username)));
+                    .body(new MessageResponse(String.format("user %s not found", username)));
         } else if (!accountService.checkUserAccount(id, body.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse(String.format("username: %s, wrong password", username)));
+                    .body(new MessageResponse(String.format("Wrong password for user %s", username)));
         }
 
         httpSession.setAttribute(USER_ID, id);
@@ -85,5 +85,20 @@ public class SessionController extends BaseController {
         }
         httpSession.removeAttribute(USER_ID);
         return ResponseEntity.ok(new MessageResponse("Success"));
+    }
+
+    @GetMapping(path = "/cur-user", produces = "application/json")
+    public ResponseEntity getCurrentUser(HttpSession httpSession) {
+        final Long id = (Long) httpSession.getAttribute(USER_ID);
+        if (id == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponse("User not logged in"));
+        }
+        final User user = accountService.getUser(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new MessageResponse(String.format("id: %s, bad cookies", id)));
+        }
+        return ResponseEntity.ok(new FullUserResponse(id, user.getLogin(), user.getEmail()));
     }
 }

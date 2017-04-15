@@ -4,10 +4,11 @@ import application.models.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.validation.constraints.Null;
 import java.util.List;
 
 public interface UserDAO {
-    @NotNull
+    @Nullable
     Long add(@NotNull String login, @NotNull String email, @NotNull String password);
 
     @Nullable
@@ -25,4 +26,6 @@ public interface UserDAO {
 
     @NotNull
     List<User> getUsers();
+
+    void clear();
 }
