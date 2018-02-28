@@ -1,8 +1,7 @@
 package application.utils.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 public class MessageResponse {
     @NotNull

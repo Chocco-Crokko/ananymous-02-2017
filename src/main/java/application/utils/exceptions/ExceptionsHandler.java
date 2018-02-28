@@ -17,7 +17,7 @@ import java.sql.SQLException;
 @ControllerAdvice
 public class ExceptionsHandler {
     @NotNull
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionsHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionsHandler.class.getSimpleName());
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity alreadyExist() {

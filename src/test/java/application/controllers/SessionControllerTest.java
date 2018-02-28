@@ -29,7 +29,7 @@ public class SessionControllerTest {
     private TestRestTemplate template;
 
     @NotNull
-    private HttpEntity getHttpEntity(@NotNull Object body, @Nullable List<String> cookie) {
+    private HttpEntity getHttpEntity(@Nullable Object body, @Nullable List<String> cookie) {
         if (cookie != null) {
             final HttpHeaders headers = new HttpHeaders();
             headers.put("Cookie", cookie);
@@ -55,6 +55,12 @@ public class SessionControllerTest {
     public void testFullRegistration() {
         List<String> cookie = signup(LOGIN, EMAIL, PASSWORD, HttpStatus.OK, null);
 
+        HttpEntity httpEntity = getHttpEntity(null, cookie);
+
+        ResponseEntity<String> exchange = template.exchange("/api/cur-user", HttpMethod.GET, httpEntity, String.class);
+
+        ResponseEntity<String> currentUser = template.getForEntity("/api/cur-user", String.class);
+        
     }
 
     @Test

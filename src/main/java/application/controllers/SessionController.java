@@ -12,7 +12,6 @@ import application.utils.responses.MessageResponse;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api")
 public class SessionController extends BaseController {
     @NotNull
-    private static final Logger LOGGER = LoggerFactory.getLogger(SessionController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionController.class.getSimpleName());
 
     public SessionController(@NotNull AccountService accountService)
     {

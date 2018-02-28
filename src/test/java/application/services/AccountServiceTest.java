@@ -177,26 +177,25 @@ public class AccountServiceTest {
     public void testAddScore() {
         final Long id = addDefaultUser();
         User user = accountService.getUser(id);
-        final String login = user.getLogin();
         assertEquals(0, user.getsScore());
         assertEquals(0, user.getmScore());
 
-        accountService.addScore(login, 10, 0);
+        accountService.addScore(id, 10, 0);
         user = accountService.getUser(id);
         assertEquals(10, user.getsScore());
         assertEquals(0, user.getmScore());
 
-        accountService.addScore(login, -5, 5);
+        accountService.addScore(id, -5, 5);
         user = accountService.getUser(id);
         assertEquals(10, user.getsScore());
         assertEquals(5, user.getmScore());
 
-        accountService.addScore(login, 8, -1);
+        accountService.addScore(id, 8, -1);
         user = accountService.getUser(id);
         assertEquals(18, user.getsScore());
         assertEquals(5, user.getmScore());
 
-        accountService.addScore(login, 100, 200);
+        accountService.addScore(id, 100, 200);
         user = accountService.getUser(id);
         assertEquals(118, user.getsScore());
         assertEquals(205, user.getmScore());

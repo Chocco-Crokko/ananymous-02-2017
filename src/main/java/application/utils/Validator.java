@@ -2,10 +2,10 @@ package application.utils;
 
 import application.utils.requests.UserRequest;
 import application.utils.requests.UsernameRequest;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.util.StringUtils;
 
-import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

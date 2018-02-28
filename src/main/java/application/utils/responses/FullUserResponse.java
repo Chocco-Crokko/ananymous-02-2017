@@ -1,8 +1,7 @@
 package application.utils.responses;
 
 import application.models.User;
-
-import javax.validation.constraints.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 public class FullUserResponse {
     private final long id;

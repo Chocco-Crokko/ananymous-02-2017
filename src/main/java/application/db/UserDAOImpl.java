@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -68,7 +67,7 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public void editUser(@NotNull Long id, @Nullable String newLogin, @Nullable String newEmail, @Nullable String newPassword,
                          @Nullable Integer newSScore, @Nullable Integer newMScore) {
-        String query = "UPDATE users SET " +
+        final String query = "UPDATE users SET " +
                 "login = COALESCE (?, login), " +
                 "email = COALESCE (?, email), " +
                 "password = COALESCE (?, password), " +
@@ -79,12 +78,12 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void addScore(@NotNull Long id, int sScore, int mScore) {
-        String query = "UPDATE users SET " +
+    public boolean addScore(@Nullable Long id, int sScore, int mScore) {
+        final String query = "UPDATE users SET " +
                 "sscore = sscore + ?, " +
                 "mscore = mscore + ?" +
                 "WHERE id = ?";
-        template.update(query, sScore, mScore, id);
+        return template.update(query, sScore, mScore, id) != 0;
     }
 
     @Override

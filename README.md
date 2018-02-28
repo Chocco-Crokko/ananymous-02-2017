@@ -1,8 +1,9 @@
 # ananymous-02-2017
 
+# [Game](https://soul-hunting.ru)
+
 # Команда
 * Перескоков Владислав
-* Артюхов Владислав
 * Набоков Денис
 
 # [Application](https://ananymous.herokuapp.com)  

@@ -1,6 +1,5 @@
 package application.models;
 
-
 public class User {
     private final long id;
     private final String login;

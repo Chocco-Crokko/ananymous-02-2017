@@ -17,7 +17,7 @@ public interface UserDAO {
     void editUser(@NotNull Long id, @Nullable String login, @Nullable String email, @Nullable String password,
                   @Nullable Integer sScore, @Nullable Integer mScore);
 
-    void addScore(@NotNull Long id, int sScore, int mScore);
+    boolean addScore(@Nullable Long id, int sScore, int mScore);
 
     @Nullable
     Long getUserID(@NotNull String username);

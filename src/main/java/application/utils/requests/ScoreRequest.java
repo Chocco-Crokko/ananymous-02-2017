@@ -2,26 +2,35 @@ package application.utils.requests;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ScoreRequest {
-    @NotNull
-    String login;
-    int sScore;
-    int mScore;
+    @Nullable
+    private Long id;
+    @Nullable
+    private String username;
+    private int sScore;
+    private int mScore;
 
     @JsonCreator
-    public ScoreRequest(@JsonProperty("login") @NotNull String login,
+    public ScoreRequest(@JsonProperty(value = "id") @Nullable Long id,
+                        @JsonProperty(value = "username") @Nullable String username,
                         @JsonProperty(value = "sScore", defaultValue = "0") int sScore,
                         @JsonProperty(value = "mScore", defaultValue = "0") int mScore) {
-        this.login = login;
+        this.id = id;
+        this.username = username;
         this.sScore = sScore;
         this.mScore = mScore;
     }
 
-    public String getLogin() {
-        return login;
+    @Nullable
+    public Long getId() {
+        return id;
+    }
+
+    @Nullable
+    public String getUsername() {
+        return username;
     }
 
     public int getsScore() {

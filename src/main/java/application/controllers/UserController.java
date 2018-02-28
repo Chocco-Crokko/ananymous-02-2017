@@ -7,13 +7,13 @@ import application.utils.requests.PasswordRequest;
 import application.utils.requests.ScoreRequest;
 import application.utils.responses.FullUserResponse;
 import application.utils.responses.MessageResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotNull;
 
 @RestController
 @CrossOrigin/*(origins = {"https:/soul-hunting.ru", "localhost"})*/
@@ -82,10 +82,24 @@ public class UserController extends BaseController {
 
     @PostMapping(path = "/score", consumes = "application/json", produces = "application/json")
     public ResponseEntity addScore(@RequestBody ScoreRequest body) {
-        final boolean success = accountService.addScore(body.getLogin(), body.getsScore(), body.getmScore());
+        Long id = body.getId();
+        if (id == null) {
+            final String username = body.getUsername();
+            if (username == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new MessageResponse("No id and username"));
+            } else {
+                id = accountService.getUserID(username);
+                if (id == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(new MessageResponse(String.format("user %s not found", username)));
+                }
+            }
+        }
+        final boolean success = accountService.addScore(id, body.getsScore(), body.getmScore());
         if (!success) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new MessageResponse(String.format("login: %s, user not found", body.getLogin())));
+                    .body(new MessageResponse(String.format("Coundn't add score for id %d", id)));
         }
         return ResponseEntity.ok(new MessageResponse("Success"));
     }
